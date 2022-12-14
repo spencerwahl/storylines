@@ -22,7 +22,7 @@
                     <span class="ml-auto flex-grow"></span>
                     <div v-if="panelIndex === 1" class="flex flex-col">
                         <label class="text-left text-xl">Content type:</label>
-                        <select @change="currentSlide.panel[panelIndex].type = $event.target.value">
+                        <select v-model="currentSlide.panel[panelIndex].type">
                             <option v-for="thing in Object.keys(editors)" :key="thing" :value="thing">
                                 {{ thing }}
                             </option>

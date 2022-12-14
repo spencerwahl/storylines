@@ -34,7 +34,7 @@
         <template v-if="loadStatus === 'loaded'">
             <div class="flex">
                 <span>{{ config.title }}</span
-                ><span class="ml-auto"></span><button>Preview</button><button>Save Changes</button>
+                ><span class="ml-auto"></span><button>Preview</button><button @click="saveConfig">Save Changes</button>
             </div>
             <div class="flex">
                 <div class="w-60 flex-shrink-0">
@@ -167,8 +167,8 @@ export default class EditorV extends Vue {
         this.fetchConfig();
     }
 
-    generateConfig(): StoryRampConfig {
-        const config = {
+    saveConfig(): StoryRampConfig {
+        /* const config = {
             title: this.title,
             lang: this.lang,
             introSlide: {
@@ -192,10 +192,10 @@ export default class EditorV extends Vue {
             contextLabel: this.contextLabel,
             contextLink: this.contextLink,
             dateModified: this.dateModified
-        };
+        }; */
 
-        console.log(config);
-        return config;
+        console.log(this.config);
+        return this.config;
     }
 
     // react to param changes in URL
