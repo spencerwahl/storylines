@@ -32,7 +32,7 @@ const props = defineProps({
     }
 });
 
-const md = new MarkdownIt({ html: true });
+const md = new MarkdownIt({ html: true, breaks: true });
 const mdContent = ref('');
 
 onMounted((): void => {
