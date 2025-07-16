@@ -89,8 +89,11 @@ const props = defineProps({
 const el = ref();
 const content = ref();
 
-// Get the ID of the first (and default) panel.
-const defaultPanel = props.config.children[0];
+// Get the ID of the first or default panel.
+const defaultPanel = (() => {
+    const firstPanel = props.config.children?.[0];
+    return firstPanel ?? { id: 'default-panel', panel: <BasePanel>{ type: 'text', title: '', content: '' } };
+})();
 
 // By default, the active config is set to the first child in the children list.
 const activeConfig = ref<BasePanel>(defaultPanel.panel);
@@ -206,10 +209,12 @@ const clickBack = (): void => {
         top: 6.5rem;
     }
 }
+
 .toc-vertical {
     .return-button-container {
         top: 4rem;
     }
+
     .return-button-reversed {
         left: calc(100vw - 9rem);
     }
@@ -221,6 +226,7 @@ const clickBack = (): void => {
     z-index: 100;
     pointer-events: none;
 }
+
 .return-button {
     float: right;
     pointer-events: auto;
@@ -228,6 +234,7 @@ const clickBack = (): void => {
     box-shadow: 0px 2px 5px #000;
     width: 75px;
 }
+
 .return-button-reversed {
     float: right;
     left: calc(100vw - 6rem);
@@ -236,9 +243,11 @@ const clickBack = (): void => {
     box-shadow: 0px 2px 5px #000;
     width: 75px;
 }
+
 .return-button img {
     margin: 0px;
 }
+
 .has-background {
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: 8px;
@@ -282,6 +291,7 @@ const clickBack = (): void => {
         display: flex;
         flex-direction: column;
     }
+
     .dynamic-content-media {
         display: flex;
         flex-direction: column-reverse;
