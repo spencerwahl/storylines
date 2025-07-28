@@ -129,7 +129,16 @@ const scrollToChapter = (id: string): void => {
         // Delay is needed to allow slides to force load when lazy loading is enabled
         emit('scroll-to-slide', props.tocItem.slideIndex);
         setTimeout(() => {
-            el.scrollIntoView({ behavior: 'smooth' });
+            const navbar = document.getElementById('h-navbar');
+            const header = document.getElementById('story-header');
+            const offset = navbar ? navbar.offsetHeight + header.offsetHeight : header.offsetHeight;
+            const rect = el.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            window.scrollTo({
+                top: rect.top + scrollTop - offset + 1,
+                behavior: 'smooth'
+            });
         }, 100);
     }
 };
