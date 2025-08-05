@@ -9,6 +9,7 @@
         <template v-if="config.videoType === 'YouTube'">
             <iframe
                 class="media-player"
+                ref="ytVid"
                 :title="config.title"
                 :src="config.src"
                 :height="config.height ? `${config.height}` : '500px'"
@@ -123,6 +124,7 @@ const rawTranscript = ref('');
 const transcriptContent = ref('');
 
 const vid = ref<HTMLVideoElement>();
+const ytVid = ref<HTMLIFrameElement>();
 const observer = ref<IntersectionObserver | undefined>(undefined);
 const loaded = ref<Boolean>(false);
 
@@ -188,15 +190,16 @@ onMounted(() => {
                 });
             });
         }
-    }
-
-    if (!vid.value) {
+    }   
+    
+    const vidElement = vid.value ?? ytVid.value;
+    if (!vidElement) {
         // TODO remove this if no one ever sees this message by Dec 2025
         console.error('video-panel: Bound element did not exist after mount');
         console.trace();
     }
 
-    observer.value?.observe(vid.value as HTMLVideoElement);
+    observer.value?.observe(vidElement as HTMLVideoElement | HTMLIFrameElement);
 });
 
 onBeforeUnmount(() => {
