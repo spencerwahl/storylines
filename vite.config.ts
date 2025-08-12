@@ -47,7 +47,8 @@ export default defineConfig(() => {
                 external: ['vue', 'ramp-pcar'],
                 output: {
                     globals: {
-                        vue: 'Vue'
+                        vue: 'Vue',
+                        'vue-papa-parse': 'VuePapaParse'
                     },
                     inlineDynamicImports: true,
                     dir: 'dist'
