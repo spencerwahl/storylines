@@ -56,7 +56,6 @@ const props = defineProps({
 
 const { t } = useI18n();
 const el = ref();
-const route = useRoute();
 
 const chartOptions = ref<DQVChartConfig>({} as DQVChartConfig);
 const title = ref('');
@@ -78,30 +77,25 @@ const menuOptions = [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const $papa: any = inject('$papa');
 
+// add FR translations strings to highcharts configuration as required
+const menuLabels = {
+    viewFullscreen: t('chart.viewFullscreen'),
+    printChart: t('chart.printChart'),
+    downloadPNG: t('chart.downloadPNG'),
+    downloadJPEG: t('chart.downloadJPEG'),
+    downloadPDF: t('chart.downloadPDF'),
+    downloadSVG: t('chart.downloadSVG'),
+    downloadCSV: t('chart.downloadCSV'),
+    downloadXLS: t('chart.downloadXLS'),
+    viewData: t('chart.viewData')
+};
+
 onMounted(() => {
     const isMobile = el.value.clientWidth <= 640;
 
     // If the client width is over 640 (not on mobile), add the `View Data Table` option to charts.
     if (!isMobile) {
         menuOptions.push('viewData');
-    }
-
-    // add FR translations strings to highcharts configuration as required
-    const frMenuLabels = {
-        viewFullscreen: t('chart.viewFullscreen'),
-        printChart: t('chart.printChart'),
-        downloadPNG: t('chart.downloadPNG'),
-        downloadJPEG: t('chart.downloadJPEG'),
-        downloadPDF: t('chart.downloadPDF'),
-        downloadSVG: t('chart.downloadSVG'),
-        downloadCSV: t('chart.downloadCSV'),
-        downloadXLS: t('chart.downloadXLS'),
-        viewData: t('chart.viewData')
-    };
-    if ((route && (route.params.lang as string)) === 'fr') {
-        Highcharts.setOptions({
-            lang: frMenuLabels
-        });
     }
 
     if (props.config.config) {
@@ -111,6 +105,7 @@ onMounted(() => {
         loading.value = false;
 
         // Set up hamburger menu options.
+        chartOptions.value.lang = menuLabels;
         if (chartOptions.value.exporting) {
             chartOptions.value.exporting.buttons = {
                 contextButton: {
@@ -184,6 +179,7 @@ const parseJSONFile = (jsonData: DQVChartConfig): void => {
     loading.value = false;
 
     // Set up hamburger menu options.
+    chartOptions.value.lang = menuLabels;
     if (chartOptions.value.exporting) {
         chartOptions.value.exporting.buttons = {
             contextButton: {
@@ -221,6 +217,9 @@ const parseCSVFile = (data: CSVFile): void => {
 
     // extract general chart options that applies to all chart types
     const defaultOptions = {
+        lang: {
+            menuLabels
+        },
         chart: {
             renderTo: 'dv-chart-container',
             type: dqvOptions?.type,

@@ -79,6 +79,17 @@ export interface LineSeriesData {
 }
 
 export interface DQVChartConfig {
+    lang?: {
+        viewFullscreen: string;
+        printChart: string;
+        downloadPNG: string;
+        downloadJPEG: string;
+        downloadPDF: string;
+        downloadSVG: string;
+        downloadCSV: string;
+        downloadXLS: string;
+        viewData: string;
+    };
     chart: {
         type: string;
     };
