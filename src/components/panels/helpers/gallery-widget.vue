@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, nextTick, onMounted, onUnmounted, ref, Teleport, Transition, useSlots } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, Teleport, Transition, useSlots } from 'vue';
 
 const props = defineProps({
     caption: String,

@@ -10,10 +10,16 @@
 
 import { defineAsyncComponent, h } from 'vue';
 
+import type { PropType } from 'vue';
+import type { ConfigFileStructure } from '@storylines/definitions';
+
 const props = defineProps({
     content: {
         type: String,
         required: true
+    },
+    configFileStructure: {
+        type: Object as PropType<ConfigFileStructure>
     }
 });
 
@@ -27,6 +33,10 @@ const render = () => {
             AudioPlayer,
             Gallery,
             GalleryItem
+        },
+        provide: {
+            // Pass the configFileStructure down to the widgets. This way we don't need to include it as a prop.
+            configFileStructure: props.configFileStructure
         },
         template: `<div class="px-10 md-content object-contain">${props.content || ''}</div>`
     };

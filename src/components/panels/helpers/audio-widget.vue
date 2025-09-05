@@ -4,7 +4,7 @@
         <div class="text-center font-bold">{{ props.title }}</div>
 
         <!-- the actual audio player -->
-        <audio class="w-5/6" :src="src" controls></audio>
+        <audio class="w-5/6" :src="audioSource" controls></audio>
 
         <!-- Transcript section. Includes show/hide button, and the transcript if provided. If no transcript is provided, "no transcript provided" will be displayed. -->
         <figcaption>
@@ -25,8 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { inject, ref, onMounted, watch } from 'vue';
 import MarkdownIt from 'markdown-it';
+import type { ConfigFileStructure } from '@storylines/definitions';
 
 const props = defineProps({
     src: {
@@ -49,19 +50,51 @@ const toggleTranscript = () => {
     transcriptOpen.value = !transcriptOpen.value;
 };
 
+const audioSource = ref(props.src);
+
 const md = new MarkdownIt({ html: true });
 const mdContent = ref('');
 
+const configFileStructure: ConfigFileStructure | undefined = inject('configFileStructure');
+
 onMounted((): void => {
+    parseMarkdown(props.transcript || '');
+
+    // obtain image files from ZIP folder in editor preview mode
+    if (configFileStructure) {
+        if (props.src.startsWith('http')) {
+            // If this is a web link, no need to convert to a blob.
+            audioSource.value = props.src;
+        } else {
+            const assetSrc = `${props.src.substring(props.src.indexOf('/') + 1)}`;
+            const audioFile = configFileStructure?.zip.file(assetSrc);
+
+            if (audioFile) {
+                // Convert the image to a blob so it can be displayed locally.
+                audioFile.async('blob').then((res: Blob) => {
+                    audioSource.value = URL.createObjectURL(res);
+                });
+            }
+        }
+    }
+});
+
+watch(props, (newVal, oldVal) => {
+    parseMarkdown(newVal.transcript || '');
+});
+
+const parseMarkdown = (text: string) => {
     mdContent.value = md
-        .render(props.transcript || '')
+        .render(text)
         .replace(/<table/g, '<div class="table-container"><table')
         .replace(/<\/table>/g, '</table></div>');
+
+    audioSource.value = props.src;
 
     document
         .querySelectorAll('.storyramp-app a:not([target])')
         .forEach((el: Element) => ((el as HTMLAnchorElement).target = '_blank'));
-});
+};
 </script>
 
 <style scoped>

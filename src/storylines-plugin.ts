@@ -1,10 +1,11 @@
-import { App } from 'vue';
+import type { App } from 'vue';
 import { i18n } from './lang';
 
 import Chart from '@storylines/components/panels/helpers/chart.vue';
 import Intro from '@storylines/components/story/introduction.vue';
 import MobileMenu from '@storylines/components/story/mobile-menu.vue';
 import StoryContent from '@storylines/components/story/story-content.vue';
+import AudioWidget from '@storylines/components/panels/helpers/audio-widget.vue';
 
 const storylinesI18n = i18n;
 export { storylinesI18n };
@@ -17,5 +18,6 @@ export default {
         app.component('storylines-intro', Intro);
         app.component('storylines-mobile-toc', MobileMenu);
         app.component('storylines-content', StoryContent);
+        app.component('storylines-audio-widget', AudioWidget);
     }
 };

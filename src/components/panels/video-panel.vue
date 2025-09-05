@@ -190,16 +190,19 @@ onMounted(() => {
                 });
             });
         }
-    }   
-    
+    }
+
     const vidElement = vid.value ?? ytVid.value;
     if (!vidElement) {
         // TODO remove this if no one ever sees this message by Dec 2025
+        // I got this error when testing a local build in the RESPECT editor.
+        // My product had a video panel, but somehow the `videoType` property was not set, and therefore neither the `ytVid` or `vid` refs were bound.
+        // No clue what I did or what could have happened to cause the videoType property not to be set, though.
         console.error('video-panel: Bound element did not exist after mount');
         console.trace();
+    } else {
+        observer.value?.observe(vidElement as HTMLVideoElement | HTMLIFrameElement);
     }
-
-    observer.value?.observe(vidElement as HTMLVideoElement | HTMLIFrameElement);
 });
 
 onBeforeUnmount(() => {
