@@ -126,12 +126,16 @@ function measure(): void {
 
 onMounted(() => {
     window.addEventListener('resize', measure);
-    EventBus.on('scroll-to-slide', (params) => {
+    EventBus.on('scroll-to-slide', (params: any) => {
         setTargetIndex(+params.slideIndex);
     });
-    const uid = route.params.uid as string;
-    lang.value = (route.params.lang as string) ? (route.params.lang as string) : 'en';
+    let uid = route.params.uid as string;
+    lang.value = route.params.lang as string;
     if (uid) {
+        fetchConfig(uid, lang.value);
+    } else if (route.query.uid && route.query.lang) {
+        uid = route.query.uid as string;
+        lang.value = route.query.uid as string;
         fetchConfig(uid, lang.value);
     } else {
         console.error(`Please supply the language and id URL params in the form of /[lang]/[uid].`);
@@ -181,7 +185,8 @@ const scrollToTop = () => {
 };
 
 const fetchConfig = (uid: string, lang: string): void => {
-    fetch(`${uid}/${uid}_${lang}.json`)
+    // import.meta.en.BASE_URL is the base url set for the vite build, defaults to '/'
+    fetch(import.meta.env.BASE_URL + `${uid}/${uid}_${lang}.json`)
         .then((res) => {
             res.json()
                 .then((configs: StoryRampConfig) => {
