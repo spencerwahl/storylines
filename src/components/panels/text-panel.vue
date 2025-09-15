@@ -2,20 +2,20 @@
     <scrollama
         class="text-panel prose max-w-none mb-5 mx-1 py-5"
         :class="{ 'has-background': background }"
-        :style="{ color: config.textColour ?? '#000'}"
+        :style="{ color: config.textColour ?? '#000' }"
     >
         <component v-if="config.title" :is="config.titleTag || 'h2'" class="px-10 mb-0 chapter-title top-20">
             {{ config.title }}
         </component>
 
-        <TextContent :content="mdContent"></TextContent>
+        <TextContent :content="mdContent" :configFileStructure="configFileStructure"></TextContent>
     </scrollama>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent, ref, onMounted } from 'vue';
 import type { PropType } from 'vue';
-import type { TextPanel } from '@storylines/definitions';
+import type { ConfigFileStructure, TextPanel } from '@storylines/definitions';
 
 import MarkdownIt from 'markdown-it';
 import Scrollama from './helpers/scrollama.vue';
@@ -26,6 +26,9 @@ const props = defineProps({
     config: {
         type: Object as PropType<TextPanel>,
         required: true
+    },
+    configFileStructure: {
+        type: Object as PropType<ConfigFileStructure>
     },
     background: {
         type: Boolean
