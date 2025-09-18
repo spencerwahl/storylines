@@ -133,6 +133,8 @@ onMounted(() => {
     lang.value = route.params.lang as string;
     if (uid) {
         fetchConfig(uid, lang.value);
+    } else if (route.query.uid && route.query.lang) {
+            fetchConfig(route.query.uid as string, route.query.lang as string);
     } else {
         console.error(`Please supply the language and id URL params in the form of /[lang]/[uid].`);
         // if no URL params have been provided redirect to canada.ca 404 page
