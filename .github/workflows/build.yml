@@ -44,8 +44,7 @@ jobs:
             - name: Install and build
               run: |
                   BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
-                  export BASE_URL="/storylines/${BRANCH_NAME}"
-                  echo "$BASE_URL"
+                  export BASE_URL="/storylines/${BRANCH_NAME}/"
                   npm ci
                   npm run build
 
