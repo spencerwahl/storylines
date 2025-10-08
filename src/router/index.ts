@@ -7,7 +7,10 @@ const routes = [
     },
     {
         path: '/:uid',
-        component: () => import('@storylines/components/story/story.vue')
+        redirect: (to: RouteLocation) => {
+            // for simplicity, defaulting the lang here instead of story.vue
+            return `/en/${to.params.uid}`
+        },
     },
     {
         path: '/:lang/:uid',
